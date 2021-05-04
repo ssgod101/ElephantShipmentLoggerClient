@@ -1,0 +1,55 @@
+/* You can add global styles to this file, and also import other style files */
+// custom theme
+@import "custom-theme.scss";
+.my-primary-text {
+  color: mat-color($my-app-primary);
+}
+.my-accent-text {
+  color: mat-color($my-app-accent);
+}
+mat-list-item:nth-child(odd){
+  background-color:white;
+}
+mat-list-item:nth-child(even) {
+  background-color:#eeeeee;
+}
+.padtop15 {
+  padding-top: 15%;
+}
+.margin-left-5 {
+  margin-left: 5%;
+}
+.material-icons.addicon {
+  margin-left: 85%;
+  font-size: 7vh;
+}
+.pad-top-2 {
+  padding-top: 2vh;
+}
+mat-form-field {
+  margin-left: 5%;
+  width:90%;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.mat-row:nth-child(odd){
+  background-color:#eeeeee;
+  text-align: center;
+}
+.mat-row.ng-star-inserted:nth-child(even) {
+  background-color: white;
+  text-align: center;
+}
+table {
+  width: 100%;
+}
+button.mat-sort-header-button {
+  margin-left: 5vw;
+}
+
+#accept, #decline {
+  background-color: mat-color($my-app-primary);
+  color: white;
+}
+
