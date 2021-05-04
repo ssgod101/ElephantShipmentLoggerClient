@@ -1,0 +1,35 @@
+<mat-toolbar color="primary">
+  <button mat-button [routerLink]="['home']">Elephant Shipment Logger</button>
+<!--  <span>Elephant Shipment Logger</span>-->
+  <span style="flex: 1 1 auto;"></span>
+  <button *ngIf="isLoggedIn && !needsReset && notificationShow" mat-button [routerLink]="['notifications']" align="end">
+    <mat-icon *ngIf="notificationActive" style="color: lightcoral">notifications_active</mat-icon>
+    <mat-icon *ngIf="!notificationActive">notifications_none</mat-icon>
+  </button>
+  <button mat-button [matMenuTriggerFor]="appMenu" align="end">
+    <mat-icon>menu</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-menu #appMenu="matMenu">
+  <div *ngIf="!isLoggedIn">
+    <a mat-menu-item [routerLink]="['login']">Login</a>
+    <a mat-menu-item [routerLink]="['register']">Register</a>
+  </div>
+  <div *ngIf="isLoggedIn && needsReset">
+    <a mat-menu-item [routerLink]="['resetpassword']">Reset Password</a>
+    <a mat-menu-item (click)="logout()">Logout</a>
+  </div>
+  <div *ngIf="isLoggedIn && !needsReset">
+    <a mat-menu-item [routerLink]="['home']">Home</a>
+    <a mat-menu-item [routerLink]="['profile']">Profile</a>
+    <a mat-menu-item [routerLink]="['shipment']">Shipment</a>
+    <a mat-menu-item [routerLink]="['tracking']">Tracking</a>
+    <a mat-menu-item [routerLink]="['report']">Report</a>
+    <a mat-menu-item *ngIf="account.type !== 'Associate'" [routerLink]="['employees']">Employees</a>
+    <a mat-menu-item [routerLink]="['warehouses']">Warehouses</a>
+    <a mat-menu-item [routerLink]="['searchwarehouses']">Search Warehouses</a>
+    <a mat-menu-item [routerLink]="['linkedcompanies']">Linked Companies</a>
+    <a mat-menu-item (click)="logout()">Logout</a>
+  </div>
+</mat-menu>
+<router-outlet></router-outlet>
