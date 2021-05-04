@@ -1,0 +1,74 @@
+<mat-card>
+  <mat-card-title class="mat-title my-primary-text" align="center">
+    <h4>Register</h4>
+  </mat-card-title>
+  <mat-card-subtitle class="my-accent-text">{{ msg }}</mat-card-subtitle>
+  <form [formGroup]="registerForm" (ngSubmit)="registerAccount()">
+    <mat-form-field flex layout="row">
+      <input matInput placeholder="Username" type="text" formControlName="username">
+      <mat-error align="end">
+        <span *ngIf="username.hasError('required')">Username is required</span>
+        <span *ngIf="!username.hasError('required') && username.hasError('invalidUsername')">Username must be at least 4 characters</span>
+        <span *ngIf="!username.hasError('required') && !username.hasError('invalidUsername')
+        && username.hasError('usernameExists')">Username already exists</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field flex layout="row">
+      <input matInput placeholder="Password" type="password" formControlName="password">
+      <mat-error align="end">
+        <span *ngIf="password.hasError('required')">Password is required</span>
+        <span *ngIf="!password.hasError('required') && password.hasError('invalidPassword')">Password must be at least 8 characters</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field flex layout="row">
+      <input matInput placeholder="Company Name" type="text" formControlName="companyname">
+      <mat-error align="end">
+        <span *ngIf="companyname.hasError('required')">Company Name is required</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field flex layout="row">
+      <input matInput placeholder="Full Name" type="text" formControlName="name">
+      <mat-error align="end">
+        <span *ngIf="name.hasError('required')">Full Name is required</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field flex layout="row">
+      <input matInput placeholder="Email" type="email" formControlName="email">
+      <mat-error align="end">
+        <span *ngIf="email.hasError('required')">Email is required</span>
+        <span *ngIf="!email.hasError('required') && email.hasError('email')">Valid format required - xx@xx.xx</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field flex layout="row">
+      <input matInput placeholder="Phone #" type="text" formControlName="phone">
+      <mat-error align="end">
+        <span *ngIf="phone.hasError('required')">Phone # is required</span>
+        <span *ngIf="!phone.hasError('required') && phone.hasError('invalidPhone')">Valid format required - (###)###-####</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field flex layout="row">
+      <input matInput placeholder="Wage" type="text" formControlName="wage">
+      <mat-error align="end">
+        <span *ngIf="wage.hasError('required')">Wage is required</span>
+        <span *ngIf="!wage.hasError('required') && wage.hasError('invalidWage')">Valid format required - decimal</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field flex layout="row">
+      <mat-select matInput placeholder="Wage Unit" formControlName="wageunit">
+        <mat-option value="/Hour">/Hour</mat-option>
+        <mat-option value="/Month">/Day</mat-option>
+        <mat-option value="/Month">/Week</mat-option>
+        <mat-option value="/Month">/Month</mat-option>
+        <mat-option value="/Year">/Year</mat-option>
+      </mat-select>
+      <mat-error align="end">
+        <span *ngIf="wageunit.hasError('required')">Wage Unit is required</span>
+      </mat-error>
+    </mat-form-field>
+    <div class="margin-left-5">
+      <button mat-raised-button color="primary" type="button" (click)="registerAccount()" [disabled]="!registerForm.valid">Register</button>
+      &nbsp;
+      <a routerLink="/login"><button mat-raised-button type="button">Cancel</button></a>
+    </div>
+  </form>
+</mat-card>

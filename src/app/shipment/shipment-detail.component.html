@@ -1,0 +1,341 @@
+ <mat-accordion>
+    <form [formGroup]="shipmentForm" (ngSubmit)="updateSelectedProduct()">
+    <mat-expansion-panel expanded="true">
+      <mat-expansion-panel-header class="my-primary-text">
+        <mat-panel-title>
+          Shipment Information
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div layout="row" *ngIf="!selectedShipment.id; else displayidro">
+        <mat-form-field flex>
+          <input matInput placeholder="Shipment Id" type="text" formControlName="id">
+          <mat-error align="end">
+            <span *ngIf="id.hasError('required')">id is required</span>
+            <span *ngIf="!id.hasError('required') && id.hasError('idExists')">Id already exists</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <ng-template #displayidro>
+        <mat-form-field flex style="margin-bottom: 1rem;font-weight: bolder;" color="accent">
+          <input matInput [readonly]="true" placeholder="Shipment ID" formControlName="id">
+        </mat-form-field>
+        <br />
+      </ng-template>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Sender Name" type="text" formControlName="senderName">
+          <mat-hint *ngIf="senderName.errors && (senderName.dirty || senderName.touched)" align="end"
+                    [ngStyle]="{'color': 'red'}">Sender Name is required
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Receiver Name" type="text" formControlName="receiverName">
+          <mat-hint *ngIf="receiverName.errors && (receiverName.dirty || receiverName.touched)" align="end"
+                    [ngStyle]="{'color': 'red'}">Receiver Name is required
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field>
+          <input matInput placeholder="Sender Phone #" type="text"  formControlName="senderPhone">
+          <mat-hint *ngIf="senderPhone.errors && (senderPhone.dirty || senderPhone.touched)" align="end" [ngStyle]="{'color': 'red'}">
+            <p *ngIf="senderPhone.hasError('required')">Sender Phone# is required.</p>
+            <p *ngIf="!senderPhone.hasError('required') && senderPhone.hasError('invalidPhone')">valid format required - (###)###-####</p>
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field>
+          <input matInput placeholder="Receiver Phone #" type="text"  formControlName="receiverPhone">
+          <mat-hint *ngIf="receiverPhone.errors && (receiverPhone.dirty || receiverPhone.touched)" align="end" [ngStyle]="{'color': 'red'}">
+            <p *ngIf="receiverPhone.hasError('required')">Phone# is required.</p>
+            <p *ngIf="!receiverPhone.hasError('required') && receiverPhone.hasError('invalidPhone')">valid format required - (###)###-####</p>
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Description" type="text" formControlName="description">
+          <mat-hint *ngIf="description.errors && (description.dirty || description.touched)" align="end"
+                    [ngStyle]="{'color': 'red'}">Description is required
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Start City" type="text" formControlName="cityStart">
+          <mat-hint *ngIf="cityStart.errors && (cityStart.dirty || cityStart.touched)" align="end"
+                    [ngStyle]="{'color': 'red'}">Start City is required
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="End City" type="text" formControlName="cityEnd">
+          <mat-hint *ngIf="cityEnd.errors && (cityEnd.dirty || cityEnd.touched)" align="end"
+                    [ngStyle]="{'color': 'red'}">End City is required
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Date Sent" type="date" formControlName="dateSent">
+          <mat-hint *ngIf="dateSent.errors && (dateSent.dirty || dateSent.touched)" align="end"
+                    [ngStyle]="{'color': 'red'}">Date is required
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Date Arrived" type="date" formControlName="dateArrived">
+          <mat-hint *ngIf="dateArrived.errors && (dateArrived.dirty || dateArrived.touched)" align="end"
+                    [ngStyle]="{'color': 'red'}">Date is required
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Vehicle Number" type="text" formControlName="vehicleNumber">
+          <mat-hint *ngIf="vehicleNumber.errors && (vehicleNumber.dirty || vehicleNumber.touched)" align="end"
+                    [ngStyle]="{'color': 'red'}">Vehicle Number is required
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div layout="row" *ngIf="hasRights">
+        <mat-form-field>
+          <mat-select placeholder="Warehouse From" formControlName="warehouseFromid" value="warehouseFromid">
+            <mat-option *ngFor="let warehouse of warehouses" [value]="warehouse.id">{{warehouse.name}}</mat-option>
+          </mat-select>
+          <mat-hint flex *ngIf="warehouseFromid.errors && (warehouseFromid.dirty || warehouseFromid.touched)" align="end"
+                    [ngStyle]="{'color': 'red', 'font-size': 'x-small', 'padding-top': '15px'}">
+            <p align="end" mat-pad-xs *ngIf="warehouseFromid.hasError('required')">Choose Warehouse From</p>
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div layout="row" *ngIf="!hasRights">
+        <mat-form-field>
+          <mat-select placeholder="Warehouse From" formControlName="warehouseFromid"  [disabled]="!hasRights" [(value)]="account.warehouseid" >
+            <mat-option *ngFor="let warehouse of warehouses" [value]="warehouse.id">{{warehouse.name}}</mat-option>
+          </mat-select>
+          <mat-hint flex *ngIf="warehouseFromid.errors && (warehouseFromid.dirty || warehouseFromid.touched)" align="end"
+                    [ngStyle]="{'color': 'red', 'font-size': 'x-small', 'padding-top': '15px'}">
+            <p align="end" mat-pad-xs *ngIf="warehouseFromid.hasError('required')">Choose Warehouse From</p>
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field>
+          <mat-select placeholder="Warehouse To" formControlName="warehouseToid">
+            <mat-option *ngFor="let warehouse of linkedWarehouses" [value]="warehouse.id">{{warehouse.name}}</mat-option>
+          </mat-select>
+          <mat-hint flex *ngIf="warehouseToid.errors && (warehouseToid.dirty || warehouseToid.touched)" align="end"
+                    [ngStyle]="{'color': 'red', 'font-size': 'x-small', 'padding-top': '15px'}">
+            <p align="end" mat-pad-xs *ngIf="warehouseToid.hasError('required')">Choose Warehouse To</p>
+          </mat-hint>
+        </mat-form-field>
+        <button  mat-raised-button  [disabled]="!warehouseToid" type="button" (click)="addSelectedRoute()" >
+          Add
+        </button>
+        <span>
+ <button *ngIf="selectedRoute.currentWarehouseid" mat-raised-button type="button" (click)="deleteRoute()">Delete</button>
+ <button *ngIf="selectedRoute.currentWarehouseid && !selectedRoute.reached" mat-raised-button type="button" (click)="reachedRoute()">Reached</button>
+ <button *ngIf="selectedRoute.currentWarehouseid && selectedRoute.reached" mat-raised-button type="button" (click)="reachedRoute()">Not Reached</button>
+ </span>
+      </div>
+      <mat-card-content>
+        <table mat-table [dataSource]="routeSource" class="mat-elevation-z8" matSort>
+          <ng-container matColumnDef="currentWarehouse">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Warehouse</th>
+            <td mat-cell *matCellDef="let element"> {{element.currentWarehouse}} </td>
+          </ng-container>
+          <ng-container matColumnDef="reached">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Reached</th>
+            <td mat-cell *matCellDef="let element"> {{element.reached}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="routeColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: routeColumns;" (click)="selectRoute(row)">></tr>
+        </table>
+      </mat-card-content>
+    </mat-expansion-panel>
+</form>
+   <form [formGroup]="productForm">
+    <mat-expansion-panel expanded="false">
+      <mat-expansion-panel-header class="my-primary-text">
+        <mat-panel-title>
+          Products Information
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Name" type="text" formControlName="nameP">
+          <mat-hint *ngIf="nameP.errors && (nameP.dirty || nameP.touched)" align="end"
+                    [ngStyle]="{'color': 'red'}">Name is required
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="QTY" type="text" formControlName="qtyP">
+          <mat-hint *ngIf="qtyP.errors && (qtyP.dirty || qtyP.touched)" align="end"
+                    [ngStyle]="{'color': 'red'}">QTY is required
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Rate Per Kg" type="text" formControlName="priceP">
+          <mat-hint *ngIf="priceP.errors && (priceP.dirty || priceP.touched)" align="end" [ngStyle]="{'color': 'red'}">
+            <p *ngIf="priceP.hasError('required')">Price is required</p>
+            <p *ngIf="!priceP.hasError('required') && priceP.hasError('invalidAmount')">valid format required - XX.XX</p>
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Length" type="text" formControlName="lengthP">
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Width" type="text" formControlName="widthP">
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Height" type="text" formControlName="heightP">
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Weight" type="text" formControlName="weightP">
+        </mat-form-field>
+      </div>
+ <button  mat-raised-button  [disabled]="!productForm.valid" type="button" (click)="addSelectedProduct()" >
+ Add
+ </button>
+      <span>
+ <button *ngIf="selectedProduct.name" mat-raised-button [disabled]="!productForm.valid" type="button" (click)="updateSelectedProduct()" >
+ Update
+ </button>
+ </span>
+      <span>
+ <button *ngIf="selectedProduct.name" mat-raised-button type="button" (click)="deleteProduct()">Delete</button>
+ </span>
+      <span>
+ <button mat-raised-button type="button" (click)="cancelProduct()" >
+Cancel
+ </button>
+ </span>
+    </mat-expansion-panel>
+   </form>
+    <mat-card-content>
+      <table mat-table [dataSource]="productSource" class="mat-elevation-z8" matSort>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+        <!-- Name Column -->
+        <ng-container matColumnDef="qty">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>QTY</th>
+          <td mat-cell *matCellDef="let element"> {{element.qty}} </td>
+        </ng-container>
+        <!-- Vendor Id Column -->
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
+          <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="productsColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: productsColumns;" (click)="select(row)">></tr>
+      </table>
+    </mat-card-content>
+   <form [formGroup]="shipmentForm" (ngSubmit)="updateSelectedProduct()">
+    <mat-expansion-panel expanded="false">
+      <mat-expansion-panel-header class="my-primary-text">
+        <mat-panel-title>
+          Extra Information
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Length" type="text" formControlName="length">
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Width" type="text" formControlName="width">
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Height" type="text" formControlName="height">
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Weight" type="text" formControlName="weight">
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Hazard Level" type="text" formControlName="hazardLevel">
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Begin Address" type="text" formControlName="beginAddress">
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="After Address" type="text" formControlName="afterAddress">
+        </mat-form-field>
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel expanded="false">
+      <mat-expansion-panel-header class="my-primary-text">
+        <mat-panel-title>
+          Amount Information
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div layout="row">
+        <mat-label style="margin-right: 5%">Paid</mat-label>
+          <mat-checkbox value="paid"></mat-checkbox>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="GST" type="text" formControlName="gst">
+          <mat-hint *ngIf="gst.errors && (gst.dirty || gst.touched)" align="end"
+                    [ngStyle]="{'color': 'red'}">GST number is required
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field flex>
+          <input matInput placeholder="Amount" type="text" formControlName="amount">
+          <mat-hint *ngIf="amount.errors && (amount.dirty || amount.touched)" align="end" [ngStyle]="{'color': 'red'}">
+            <p *ngIf="amount.hasError('required')">Amount is required</p>
+            <p *ngIf="!amount.hasError('required') && amount.hasError('invalidAmount')">valid format required - XX.XX</p>
+          </mat-hint>
+        </mat-form-field>
+      </div>
+    </mat-expansion-panel>
+   </form>
+  </mat-accordion>
+  <br/>
+ <form [formGroup]="shipmentForm" (ngSubmit)="updateSelectedProduct()">
+  <div class="mat-pad-sm">
+ <span>
+ <button mat-raised-button [disabled]="!shipmentForm.valid" type="button"
+         (click)="updateSelectedShipment()">Save</button>
+ </span>
+    <span>
+ <button *ngIf="selectedShipment.id" mat-raised-button type="button"
+         (click)="deleted.emit(selectedShipment)">Delete</button>
+ </span>
+    <span>
+ <button mat-raised-button type="button" (click)="cancelled.emit(selectedShipment)">Cancel</button>
+ </span>
+  </div>
+</form>

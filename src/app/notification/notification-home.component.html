@@ -1,0 +1,29 @@
+ <mat-toolbar color="secondary">
+    <span>Notifications</span>
+  </mat-toolbar>
+  <!--First Mat-Card-->
+  <mat-card>
+    <mat-card-header layout="row">
+      <mat-card-title>
+        <span>{{ msg }}</span>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div *ngIf="hasNotifications && isOwner">
+        <!--Second Mat-Card-->
+        <mat-card *ngFor="let not of notifications" style="margin-top: 10px">
+          <mat-card-header>
+            <mat-card-title>{{not.companyFrom}}</mat-card-title>
+            <mat-card-subtitle>{{not.dateSent}}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{not.message}}</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button id="accept" (click)="accept(not)">Accept</button>
+            <button mat-button id="decline" (click)="decline(not)">Decline</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </mat-card-content>
+  </mat-card>

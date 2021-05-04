@@ -1,0 +1,54 @@
+<mat-card *ngIf="hideEditForm" style="margin-bottom: 10vh;">
+  <mat-card-title class="mat-title my-primary-text" align="center">
+  <h4>{{currentWarhouse}} Shipments</h4>
+  </mat-card-title>
+  <mat-card-content>
+    <div layout="row" *ngIf="hasRights">
+      <mat-form-field>
+        <mat-select  placeholder="Warehouse" [(value)]="getWarhouseid" (valueChange)="getWarhouse()">
+          <mat-option *ngFor="let warehouse of warehouses" [value]="warehouse.id">{{warehouse.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Shipment No.</th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+      </ng-container>
+      <ng-container matColumnDef="receiverName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Receiver Name</th>
+        <td mat-cell *matCellDef="let element"> {{element.receiverName}} </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="select(row)">></tr>
+    </table>
+    <mat-icon (click)="newShipment()" matTooltip="Add New Shipment" class="addicon pad-top-2" color="primary">control_point</mat-icon>
+  </mat-card-content>
+  <mat-card-subtitle class="my-accent-text">{{ msg }}</mat-card-subtitle>
+</mat-card>
+<mat-card *ngIf="!hideEditForm">
+  <mat-card-header layout="row">
+    <mat-card-title style="margin-bottom: 4vh;">
+      <div class="mat-title my-primary-text">
+        <img style="float: left; margin-left: 20%; padding-right: 5px;"   height="20%" width="20%" src="../assets/elephantshipping.jpg" alt="logo"/><h3 style="float: left; margin-top: 2.5%;"> - {{msg}}</h3>
+      </div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <app-shipment-detail [selectedShipment]="selectedShipment"
+                        [warehouses]="warehouses"
+                        [linkedWarehouses]="linkedWarehouses"
+                        [shipments]="shipments"
+                         [hasRights]="hasRights"
+                         [account]="account"
+                        (cancelled)="cancel('cancelled')"
+                        (saved)="save($event)"
+                        (deleted)="delete($event)">
+    </app-shipment-detail>
+  </mat-card-content>
+  <mat-card-subtitle class="my-accent-text">{{ msg }}</mat-card-subtitle>
+</mat-card>

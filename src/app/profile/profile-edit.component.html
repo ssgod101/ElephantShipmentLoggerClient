@@ -1,0 +1,55 @@
+<mat-card-title class="mat-title my-primary-text" align="center">
+  <h4>Edit Profile</h4>
+</mat-card-title>
+<form [formGroup]="editProfileForm" (ngSubmit)="editProfile()">
+  <mat-form-field flex layout="row">
+    <input matInput placeholder="New Password" type="password" formControlName="password">
+    <mat-error align="end">
+      <span *ngIf="password.hasError('invalidPassword')">New Password must be at least 8 characters</span>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field flex layout="row">
+    <input matInput placeholder="Full Name" type="text" formControlName="name">
+    <mat-error align="end">
+      <span *ngIf="name.hasError('required')">Full Name is required</span>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field flex layout="row">
+    <input matInput placeholder="Email" type="email" formControlName="email">
+    <mat-error align="end">
+      <span *ngIf="email.hasError('required')">Email is required</span>
+      <span *ngIf="!email.hasError('required') && email.hasError('email')">Valid format required - xx@xx.xx</span>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field flex layout="row">
+    <input matInput placeholder="Phone #" type="text" formControlName="phone">
+    <mat-error align="end">
+      <span *ngIf="phone.hasError('required')">Phone # is required</span>
+      <span *ngIf="!phone.hasError('required') && phone.hasError('invalidPhone')">Valid format required - (###)###-####</span>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field flex layout="row">
+    <input matInput placeholder="Wage" type="text" formControlName="wage">
+    <mat-error align="end">
+      <span *ngIf="wage.hasError('required')">Wage is required</span>
+      <span *ngIf="!wage.hasError('required') && wage.hasError('invalidWage')">Valid format required - decimal</span>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field flex layout="row">
+    <mat-select matInput placeholder="Wage Unit" formControlName="wageunit">
+      <mat-option value="/Hour">/Hour</mat-option>
+      <mat-option value="/Month">/Day</mat-option>
+      <mat-option value="/Month">/Week</mat-option>
+      <mat-option value="/Month">/Month</mat-option>
+      <mat-option value="/Year">/Year</mat-option>
+    </mat-select>
+    <mat-error align="end">
+      <span *ngIf="wageunit.hasError('required')">Wage Unit is required</span>
+    </mat-error>
+  </mat-form-field>
+  <div class="margin-left-5">
+    <button mat-raised-button color="primary" type="button" (click)="editProfile()" [disabled]="!editProfileForm.valid">Update</button>
+    &nbsp;
+    <button mat-raised-button type="button" (click)="cancel.emit()">Cancel</button>
+  </div>
+</form>

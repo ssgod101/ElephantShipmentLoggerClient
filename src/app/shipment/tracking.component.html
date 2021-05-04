@@ -1,0 +1,29 @@
+<form [formGroup]="Form" (ngSubmit)="getRoutes()">
+  <br  style="margin-bottom: 10vh;">
+  <mat-card-title class="mat-title my-primary-text" align="center">
+    <h4>Tracking</h4>
+  </mat-card-title>
+<mat-card>
+    <div layout="row">
+      <mat-form-field flex>
+        <input matInput placeholder="Shipment id" type="text" formControlName="shipmentid">
+      </mat-form-field>
+    </div>
+<br>
+  <mat-card-content *ngIf="show">
+    <table mat-table [dataSource]="routeSource" class="mat-elevation-z8" matSort>
+      <ng-container matColumnDef="currentWarehouse">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Warehouse</th>
+        <td mat-cell *matCellDef="let element"> {{element.currentWarehouse}} </td>
+      </ng-container>
+      <ng-container matColumnDef="reached">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Reached</th>
+        <td mat-cell *matCellDef="let element"> {{element.reached}} </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="routeColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: routeColumns;">></tr>
+    </table>
+  </mat-card-content>
+  <mat-card-subtitle class="my-accent-text">{{ msg }}</mat-card-subtitle>
+</mat-card>
+</form>

@@ -1,0 +1,25 @@
+<mat-card>
+  <mat-card-title class="mat-title my-primary-text" align="center">
+    <h4>Login</h4>
+  </mat-card-title>
+  <mat-card-subtitle class="my-accent-text margin-left-5">{{ msg }}</mat-card-subtitle>
+  <form [formGroup]="loginForm" (ngSubmit)="loginAccount()">
+    <mat-form-field flex layout="row">
+      <input matInput placeholder="Username" type="text" formControlName="username">
+      <mat-error align="end">
+        <span *ngIf="username.hasError('required')">Username is required</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field flex layout="row">
+      <input matInput placeholder="Password" type="password" formControlName="password">
+      <mat-error align="end">
+        <span *ngIf="password.hasError('required')">Password is required</span>
+      </mat-error>
+    </mat-form-field>
+    <div class="margin-left-5">
+      <button mat-raised-button color="primary" type="button" (click)="loginAccount()" [disabled]="!loginForm.valid">Login</button>
+      &nbsp;
+      <a routerLink="/register"><button mat-raised-button type="button">Register</button></a>
+    </div>
+  </form>
+</mat-card>

@@ -1,0 +1,31 @@
+<mat-card>
+  <div *ngIf="hideEditForm">
+    <mat-card-title class="mat-title my-primary-text" align="center">
+      <h4>Profile</h4>
+    </mat-card-title>
+    <mat-card-subtitle class="my-accent-text margin-left-5">{{ msg }}</mat-card-subtitle>
+    <p class="margin-left-5">Username: {{ username }}</p>
+    <p class="margin-left-5">Company: {{ company }}</p>
+    <p class="margin-left-5">Company Role: {{ companyrole }}</p>
+    <p class="margin-left-5">Full Name: {{ name }}</p>
+    <p class="margin-left-5">Email: {{ email }}</p>
+    <p class="margin-left-5">Phone Number: {{ phonenumber }}</p>
+    <p class="margin-left-5">Wage: {{ wage }}</p>
+    <mat-card-subtitle class="margin-left-5" style="color: red">{{ confirmation }}</mat-card-subtitle>
+    <div *ngIf="confirmation == ''" class="margin-left-5">
+      <button mat-raised-button color="primary" type="button" (click)="editProfileOnOff()">Edit Profile</button>
+      &nbsp;
+      <button mat-raised-button *ngIf="companyrole === 'Owner'" type="button" (click)="userConfirmation()">Delete Account/Company</button>
+    </div>
+    <div *ngIf="confirmation != ''" class="margin-left-5">
+      <button mat-raised-button color="primary" type="button" (click)="deleteAccountCompany()">Yes</button>
+      &nbsp;
+      <button mat-raised-button *ngIf="companyrole === 'Owner'" type="button" (click)="userConfirmation()">No</button>
+    </div>
+  </div>
+  <app-profile-edit
+    *ngIf="!hideEditForm"
+    (update)="updateProfile($event)"
+    (cancel)="editProfileOnOff()">
+  </app-profile-edit>
+</mat-card>
