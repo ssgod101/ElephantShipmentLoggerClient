@@ -1,0 +1,142 @@
+ <mat-accordion>
+      <form [formGroup]="warehouseForm" (ngSubmit)="updateSelectedWarehouse()">
+  <mat-expansion-panel expanded="true">
+    <mat-expansion-panel-header class="my-primary-text">
+      <mat-panel-title>
+        Warehouse Information
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div layout="row">
+      <mat-form-field>
+        <input matInput placeholder="Name" type="text" required formControlName="name">
+        <mat-hint *ngIf="name.errors && (name.dirty || name.touched)" align="end"
+                  [ngStyle]="{'color': 'red'}"> Name is required </mat-hint>
+      </mat-form-field>
+    </div>
+    <div layout="row">
+      <mat-form-field>
+        <input matInput placeholder="Address" type="text" required formControlName="address1">
+        <mat-hint *ngIf="address1.errors && (address1.dirty || address1.touched)" align="end"
+                  [ngStyle]="{'color': 'red'}"> Address is required </mat-hint>
+      </mat-form-field>
+    </div>
+    <div layout="row">
+      <mat-form-field>
+        <input matInput placeholder="City" type="text" required formControlName="city">
+        <mat-hint *ngIf="city.errors && (city.dirty || city.touched)" align="end"
+                  [ngStyle]="{'color': 'red'}"> City is required </mat-hint>
+      </mat-form-field>
+    </div>
+    <div layout="row">
+      <mat-form-field>
+        <input matInput placeholder="Province/State" type="text" required formControlName="province">
+        <mat-hint *ngIf="province.errors && (province.dirty || province.touched)" align="end"
+                  [ngStyle]="{'color': 'red'}"> Province is required </mat-hint>
+      </mat-form-field>
+    </div>
+    <div layout="row">
+      <mat-form-field>
+        <input matInput placeholder="Country" type="text" required formControlName="country">
+        <mat-hint *ngIf="country.errors && (country.dirty || country.touched)" align="end"
+                  [ngStyle]="{'color': 'red'}"> Country is required </mat-hint>
+      </mat-form-field>
+    </div>
+  </mat-expansion-panel>
+      </form>
+    </mat-accordion>
+<mat-accordion *ngIf="selectedWarehouse.id && hasRights">
+      <form [formGroup]="rateForm" >
+      <mat-expansion-panel expanded="true">
+        <mat-expansion-panel-header class="my-primary-text">
+          <mat-panel-title>
+            Rate Information
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div layout="row">
+          <mat-form-field>
+            <mat-select placeholder="To Warehouse" formControlName="toWarehouseid" value="id">
+              <mat-option *ngFor="let warehouse of warehouses" [value]="warehouse.id">{{warehouse.name}}</mat-option>
+            </mat-select>
+            <mat-hint flex *ngIf="toWarehouseid.errors && (toWarehouseid.dirty || toWarehouseid.touched)" align="end"
+                      [ngStyle]="{'color': 'red', 'font-size': 'x-small', 'padding-top': '15px'}">
+              <p align="end" mat-pad-xs *ngIf="toWarehouseid.hasError('required')">Choose Warehouse To</p>
+            </mat-hint>
+          </mat-form-field>
+        </div>
+        <div layout="row">
+          <mat-form-field flex>
+            <input matInput placeholder="Rate Per Cubic Feet" type="text" formControlName="ratePerCubicFeet">
+            <mat-hint *ngIf="ratePerCubicFeet.errors && (ratePerCubicFeet.dirty || ratePerCubicFeet.touched)" align="end" [ngStyle]="{'color': 'red'}">
+              <p *ngIf="ratePerCubicFeet.hasError('required')">Rate is required</p>
+              <p *ngIf="!ratePerCubicFeet.hasError('required') && ratePerCubicFeet.hasError('invalidAmount')">valid format required - XX.XX</p>
+            </mat-hint>
+          </mat-form-field>
+        </div>
+        <div layout="row">
+          <mat-form-field flex>
+            <input matInput placeholder="Rate Per Kg" type="text" formControlName="ratePerKg">
+            <mat-hint *ngIf="ratePerKg.errors && (ratePerKg.dirty || ratePerKg.touched)" align="end" [ngStyle]="{'color': 'red'}">
+              <p *ngIf="ratePerKg.hasError('required')">Rate is required</p>
+              <p *ngIf="!ratePerKg.hasError('required') && ratePerKg.hasError('invalidAmount')">valid format required - XX.XX</p>
+            </mat-hint>
+          </mat-form-field>
+        </div>
+        <span>
+ <button mat-raised-button [disabled]="!rateForm.valid" type="button" (click)="addSelectedRate()" >
+ Add Rate
+ </button>
+ </span>
+        <span>
+ <button  mat-raised-button [disabled]="!rateForm.valid" type="button" (click)="updateSelectedRate()" >
+ Update Rate
+ </button>
+ </span>
+        <span>
+ <button  mat-raised-button [disabled]="!rateForm.valid" type="button" (click)="deleteRate()">Delete</button>
+ </span>
+        <span>
+ <button mat-raised-button type="button" (click)="cancelRate()" >
+Cancel
+ </button>
+ </span>
+      </mat-expansion-panel>
+      </form>
+    </mat-accordion>
+  <mat-card-content *ngIf="selectedWarehouse.id">
+    <table mat-table [dataSource]="ratesSource" class="mat-elevation-z8" matSort>
+      <ng-container matColumnDef="toWarehouse">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>To Warehouse</th>
+        <td mat-cell *matCellDef="let element"> {{element.toWarehouse}} </td>
+      </ng-container>
+      <!-- Name Column -->
+      <ng-container matColumnDef="ratePerCubicFeet">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Rate Per Cubic Feet</th>
+        <td mat-cell *matCellDef="let element"> {{element.ratePerCubicFeet}} </td>
+      </ng-container>
+      <!-- Vendor Id Column -->
+      <ng-container matColumnDef="ratePerKg">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Rate Per Kg</th>
+        <td mat-cell *matCellDef="let element"> {{element.ratePerKg}} </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="ratesColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: ratesColumns;" (click)="select(row)">></tr>
+    </table>
+  </mat-card-content>
+
+<form [formGroup]="warehouseForm" (ngSubmit)="updateSelectedWarehouse()">
+  <div class="mat-pad-sm">
+ <span>
+ <button mat-raised-button *ngIf="hasRights" [disabled]="!warehouseForm.valid" type="button" (click)="updateSelectedWarehouse()" >
+ Save
+ </button>
+ </span>
+    <span>
+ <button *ngIf="selectedWarehouse.id && hasRights" mat-raised-button type="button" (click)="deleted.emit(selectedWarehouse)">Delete</button>
+ </span>
+    <span>
+ <button mat-raised-button type="button"
+         (click)="cancelled.emit(selectedWarehouse)">Cancel</button>
+ </span>
+  </div>
+</form>

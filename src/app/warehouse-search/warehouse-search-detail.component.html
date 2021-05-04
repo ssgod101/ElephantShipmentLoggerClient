@@ -1,0 +1,32 @@
+<div>
+  <div layout="row">
+    <h4>Company: {{companyname}}</h4>
+  </div>
+  <div layout="row">
+    <h4>Name: {{selectedWarehouse.name}}</h4>
+  </div>
+  <div layout="row">
+    <h4>Address: {{selectedWarehouse.address}}</h4>
+  </div>
+  <div layout="row">
+    <h4>City: {{selectedWarehouse.city}}</h4>
+  </div>
+  <div layout="row">
+    <h4>Province: {{selectedWarehouse.province}}</h4>
+  </div>
+  <div layout="row">
+    <h4>Country: {{selectedWarehouse.country}}</h4>
+  </div>
+  <div class="mat-pad-sm">
+    <span *ngIf="!hideButton">
+      <button mat-raised-button type="button" (click)="startLinkProcess()">Send Link Request</button>
+    </span>
+    <span *ngIf="hideButton">
+      <h4 *ngIf="sameCompany">This warehouse belongs to your company.</h4>
+      <h4 *ngIf="linkedCompany">This warehouse belongs to a company that you are linked with.</h4>
+    </span>
+    <span>
+      <button mat-raised-button type="button" (click)="cancelled.emit(selectedWarehouse)">Back</button>
+    </span>
+  </div>
+</div>
